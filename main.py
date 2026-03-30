@@ -3,6 +3,8 @@
 ##https://www.youtube.com/watch?v=bEEzKvkj0nI
 ##https://discuss.python.org/t/webscraping-and-copying-data-into-google-sheets/62021
 ##https://docs.gspread.org/en/v3.7.0/api.html
+import json
+
 import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
@@ -35,9 +37,9 @@ if __name__ == '__main__':
         
         for i, col in enumerate(cells):
             if i == 3:
-                #Format as a Markdown link: [Text](URL)
+                #Format as a Markdown link formula: =HYPERLINK(URL, Text)
                 link_tag = col.find('a')
-                link_data = f"[{link_tag.text.strip()}]({link_tag.get('href')})"
+                link_data = f"=HYPERLINK(\"{link_tag.get('href')}\", \"{link_tag.text.strip()}\")"
                 cols.append(link_data)
             else:
                 cols.append(col.text.strip())
@@ -51,6 +53,7 @@ if __name__ == '__main__':
     sheet.clear()
 
     #Insert the data into the Google Sheet
-    response = sheet.insert_rows(data, 1)
-
-    print("Data inserted successfully:", response)
+    ##'USER_ENTERED' allows Google Sheets to interpret the formula used on line 42
+    ###and properly interpret the Markdown link as a hyperlink in the sheet
+    response = sheet.insert_rows(data, 1, value_input_option='USER_ENTERED') 
+    print("Data inserted successfully:", json.dumps(response, indent=2))
