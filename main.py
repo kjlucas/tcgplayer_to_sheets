@@ -12,6 +12,7 @@ import os
 load_dotenv()
 
 import gspread
+from gspread_formatting import set_column_widths
 
 if __name__ == '__main__':
     # Get the HTML of your public TCGPLayer collection page
@@ -55,5 +56,10 @@ if __name__ == '__main__':
     #Insert the data into the Google Sheet
     ##'USER_ENTERED' allows Google Sheets to interpret the formula used on line 42
     ###and properly interpret the Markdown link as a hyperlink in the sheet
-    response = sheet.insert_rows(data, 1, value_input_option='USER_ENTERED') 
+    response = sheet.insert_rows(data, 1, value_input_option='USER_ENTERED')
+
+    #Setting col widths for better readability
+    col_widths = [('A', 50), ('B', 50), ('C', 50), ('D', 250), ('E', 100), ('F', 255), ('G', 100), ('H', 100), ('I', 100)]
+    set_column_widths(sheet, col_widths)
+
     print("Data inserted successfully:", json.dumps(response, indent=2))

@@ -1,3 +1,20 @@
-.env
+# .gitignore
+
+# VS Code directory
 .vscode/
-card-collection-updater-key.json
+
+# Environment variables
+.env
+
+# Google Service Account Key (JSON)
+*.json
+
+# Python cache and virtual environments
+__pycache__/
+venv/
+.venv
+*.py[cod]
+
+# OS specific files
+.DS_Store
+Thumbs.db
