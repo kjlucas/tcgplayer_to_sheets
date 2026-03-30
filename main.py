@@ -22,9 +22,25 @@ if __name__ == '__main__':
 
     #Transforms into a list of lists, where each inner list represents a row of data from the table
     data = []
+
+    #Get the header row and add it to the data list
+    header_row = [th.text.strip() for th in table.find('tr').find_all('th')]
+    data.append(header_row)
+
     for row in table.find_all('tr'):
+        if row.find('th'): #skip header row
+            continue
         cells = row.find_all('td')
-        cols = [col.text.strip() for col in cells]
+        cols = []
+        
+        for i, col in enumerate(cells):
+            if i == 3:
+                #Format as a Markdown link: [Text](URL)
+                link_tag = col.find('a')
+                link_data = f"[{link_tag.text.strip()}]({link_tag.get('href')})"
+                cols.append(link_data)
+            else:
+                cols.append(col.text.strip())
         data.append(cols)
 
     #Setup Google Sheets API client using gspread and the service account key
