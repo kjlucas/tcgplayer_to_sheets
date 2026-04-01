@@ -1,9 +1,5 @@
-#credits:
-##https://www.learndatasci.com/tutorials/ultimate-guide-web-scraping-w-python-requests-and-beautifulsoup/
-##https://www.youtube.com/watch?v=bEEzKvkj0nI
-##https://discuss.python.org/t/webscraping-and-copying-data-into-google-sheets/62021
-##https://docs.gspread.org/en/v3.7.0/api.html
 import json
+from turtle import color
 
 import requests
 from bs4 import BeautifulSoup
@@ -12,7 +8,7 @@ import os
 load_dotenv()
 
 import gspread
-from gspread_formatting import set_column_widths
+from gspread_formatting import *
 
 if __name__ == '__main__':
     # Get the HTML of your public TCGPLayer collection page
@@ -59,7 +55,69 @@ if __name__ == '__main__':
     response = sheet.insert_rows(data, 1, value_input_option='USER_ENTERED')
 
     #Setting col widths for better readability
-    col_widths = [('A', 50), ('B', 50), ('C', 50), ('D', 250), ('E', 100), ('F', 255), ('G', 100), ('H', 100), ('I', 100)]
+    col_widths = [
+        ('A', 50), ('B', 50), ('C', 50), ('D', 250), 
+        ('E', 100), ('F', 255), ('G', 100), ('H', 100), 
+        ('I', 100), ('K', 255), ('L', 100)
+    ]
     set_column_widths(sheet, col_widths)
 
+    #Adding a table for counts of each unique value in the 'Set' column (column F)
+    #That are also have a 1 in the want column (column B)
+    query = "=QUERY(A:I, \"select F, count(F) where B = 1 group by F order by count(F) desc label F 'Set', count(F) 'Want Count'\", 1)"
+    cell_list = sheet.range('K1')
+    cell_list[0].value = query
+
+    rsp2 = sheet.update_cells(cell_list, value_input_option='USER_ENTERED')
+
+
+#FORMATTING
+
+    #Freeze the header row
+    set_frozen(sheet, 1)
+
+    hdr_fmt = cellFormat(
+        backgroundColor=color(0.75, 0.75, 0.75),
+        textFormat=textFormat(bold=True),
+        horizontalAlignment='CENTER'
+    )
+
+    hwt_fmt = cellFormat(
+        backgroundColor=color(0.89, 0.89, 0.89),
+        textFormat=textFormat(bold=True),
+        horizontalAlignment='CENTER'
+    )
+
+    set_fmt = cellFormat(
+        backgroundColor=color(0.89, 0.89, 0.89),
+        textFormat=textFormat(bold=True),
+        horizontalAlignment='LEFT'
+    )
+
+    cnt_fmt = cellFormat(
+        backgroundColor=color(0.89, 0.89, 0.89),
+        textFormat=textFormat(bold=False),
+        horizontalAlignment='CENTER'
+    )
+
+    gen_fmt = cellFormat(
+        backgroundColor=color(1, 1, 1),
+        textFormat=textFormat(bold=False),
+        horizontalAlignment='LEFT'
+    )
+    
+    format_cell_ranges(
+        sheet, 
+        [
+            ('A1:L1', hdr_fmt), 
+            ('A2:C', hwt_fmt), 
+            ('D2:J', gen_fmt),
+            ('K2:K', set_fmt), 
+            ('L2:L', cnt_fmt),
+            ('M1:AA', gen_fmt)
+        ]  
+    )
+
+
     print("Data inserted successfully:", json.dumps(response, indent=2))
+    print("Query inserted successfully:", json.dumps(rsp2, indent=2))
