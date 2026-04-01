@@ -54,14 +54,6 @@ if __name__ == '__main__':
     ###and properly interpret the Markdown link as a hyperlink in the sheet
     response = sheet.insert_rows(data, 1, value_input_option='USER_ENTERED')
 
-    #Setting col widths for better readability
-    col_widths = [
-        ('A', 50), ('B', 50), ('C', 50), ('D', 250), 
-        ('E', 100), ('F', 255), ('G', 100), ('H', 100), 
-        ('I', 100), ('K', 255), ('L', 100)
-    ]
-    set_column_widths(sheet, col_widths)
-
     #Adding a table for counts of each unique value in the 'Set' column (column F)
     #That are also have a 1 in the want column (column B)
     query = "=QUERY(A:I, \"select F, count(F) where B = 1 group by F order by count(F) desc label F 'Set', count(F) 'Want Count'\", 1)"
@@ -72,6 +64,14 @@ if __name__ == '__main__':
 
 
 #FORMATTING
+
+    #Setting col widths for better readability
+    col_widths = [
+        ('A', 50), ('B', 50), ('C', 50), ('D', 250), 
+        ('E', 100), ('F', 255), ('G', 100), ('H', 100), 
+        ('I', 100), ('K', 255), ('L', 100)
+    ]
+    set_column_widths(sheet, col_widths)
 
     #Freeze the header row
     set_frozen(sheet, 1)
