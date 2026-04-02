@@ -51,7 +51,7 @@ Before running the script, ensure you have:
    ```bash
    python main.py
    ```
-3. The script will clear the existing sheet, scrape the latest data, and insert the updated rows with functional hyperlinks.
+3. The script will clear the existing sheet, scrape the latest data, and insert the updated rows.
 
 ## 🧪 Technical Overview
 
