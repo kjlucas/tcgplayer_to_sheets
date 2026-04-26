@@ -89,7 +89,7 @@ Add a feature that dynamically pulls hit rates for each rarity per set. Then com
 - **Practicality Index** = weighted probability of pulling a card of _"value"_ (i.e. in ISO or tradable)
   <!-- prettier-ignore -->
     - **PI**= $(\sum_{i}^{k} $`PHR`$_i$ + $\sum_{i}^{k} $`AHR`$_i)$ - $\sum_{i}^{k} $`OHR`$_i$
-    - where $i$ lowest rarity of value(usually UR) and $k$ is highest rarity
+    - where $i$ is the lowest rarity of value(usually UR) and $k$ is the highest rarity
     - rarity floor $i$ can be adjusted per set
 
 ### Gather relevant data
